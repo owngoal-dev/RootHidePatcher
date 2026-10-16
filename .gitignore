@@ -2,3 +2,7 @@
 .theos
 packages
 /RootHidePatcher.xcodeproj/project.xcworkspace/xcuserdata
+
+# Local validation evidence and generated test results are not public source.
+/Tests/Artifacts/
+*.xcresult/

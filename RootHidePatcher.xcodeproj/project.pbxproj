@@ -6,7 +6,35 @@
 	objectVersion = 56;
 	objects = {
 
+        A40000000000000000000001 /* ConversionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests/ConversionTests.swift; sourceTree = SOURCE_ROOT; };
+        A40000000000000000000002 /* ConversionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A40000000000000000000001; };
+        A40000000000000000000003 /* PatcherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = PatcherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+        A40000000000000000000004 /* Test Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A40000000000000000000002,); runOnlyForDeploymentPostprocessing = 0; };
+        A40000000000000000000005 /* Test Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+        A40000000000000000000006 /* App proxy */ = {isa = PBXContainerItemProxy; containerPortal = 6DCF8E2829EA9E6F00D55A37; proxyType = 1; remoteGlobalIDString = 6DCF8E2F29EA9E6F00D55A37; remoteInfo = RootHidePatcher; };
+        A40000000000000000000007 /* App dependency */ = {isa = PBXTargetDependency; target = 6DCF8E2F29EA9E6F00D55A37; targetProxy = A40000000000000000000006; };
+        A40000000000000000000008 /* PatcherTests */ = {
+            isa = PBXNativeTarget;
+            buildConfigurationList = A40000000000000000000009;
+            buildPhases = (A40000000000000000000004, A40000000000000000000005,);
+            buildRules = ();
+            dependencies = (A40000000000000000000007,);
+            name = PatcherTests;
+            productName = PatcherTests;
+            productReference = A40000000000000000000003;
+            productType = "com.apple.product-type.bundle.unit-test";
+        };
+        A40000000000000000000009 = {isa = XCConfigurationList; buildConfigurations = (A4000000000000000000000A, A4000000000000000000000B,); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+
+A4000000000000000000000A = {isa = XCBuildConfiguration; name = Debug; buildSettings = { BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGNING_ALLOWED = NO; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; PRODUCT_BUNDLE_IDENTIFIER = com.roothide.patcher.tests; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Patcher.app/Patcher"; }; };
+A4000000000000000000000B = {isa = XCBuildConfiguration; name = Release; buildSettings = { BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGNING_ALLOWED = NO; GENERATE_INFOPLIST_FILE = YES; IPHONEOS_DEPLOYMENT_TARGET = 15.0; PRODUCT_BUNDLE_IDENTIFIER = com.roothide.patcher.tests; PRODUCT_NAME = "$(TARGET_NAME)"; SDKROOT = iphoneos; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Patcher.app/Patcher"; }; };
+
 /* Begin PBXBuildFile section */
+		A20000000000000000000001 /* ConversionSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000001 /* ConversionSession.swift */; };
+		A20000000000000000000002 /* PatcherStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000002 /* PatcherStyle.swift */; };
+		A20000000000000000000003 /* ConversionLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000003 /* ConversionLogView.swift */; };
+		A20000000000000000000004 /* LicenseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000004 /* LicenseListView.swift */; };
+		A20000000000000000000005 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000005 /* Localizable.xcstrings */; };
 		6DCF8E3429EA9E6F00D55A37 /* DerootifierApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCF8E3329EA9E6F00D55A37 /* DerootifierApp.swift */; };
 		6DCF8E3629EA9E6F00D55A37 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCF8E3529EA9E6F00D55A37 /* ContentView.swift */; };
 		6DCF8E3829EA9E7100D55A37 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DCF8E3729EA9E7100D55A37 /* Assets.xcassets */; };
@@ -17,7 +45,6 @@
 		6DE2082E29EB3F230053E93D /* MaterialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE2082D29EB3F230053E93D /* MaterialView.swift */; };
 		6DE2083229EB46850053E93D /* DocumentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE2083129EB46850053E93D /* DocumentPicker.swift */; };
 		6DE2088C29F591160053E93D /* CreditsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DE2088B29F591160053E93D /* CreditsView.swift */; };
-		6DE2089929F5B80A0053E93D /* FluidGradient in Frameworks */ = {isa = PBXBuildFile; productRef = 6DE2089829F5B80A0053E93D /* FluidGradient */; settings = {ATTRIBUTES = (Required, ); }; };
 		842F706B2ACC3847002E5574 /* patch.sh in Resources */ = {isa = PBXBuildFile; fileRef = 6DCF8E4429EA9F5D00D55A37 /* patch.sh */; };
 		842F70742ACDC6DC002E5574 /* Makefile in Sources */ = {isa = PBXBuildFile; fileRef = 842F70712ACDC6DC002E5574 /* Makefile */; };
 		842F70782ACE4385002E5574 /* roothide.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 842F70772ACE4286002E5574 /* roothide.entitlements */; };
@@ -30,6 +57,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A10000000000000000000001 /* ConversionSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionSession.swift; sourceTree = "<group>"; };
+		A10000000000000000000002 /* PatcherStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatcherStyle.swift; sourceTree = "<group>"; };
+		A10000000000000000000003 /* ConversionLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionLogView.swift; sourceTree = "<group>"; };
+		A10000000000000000000004 /* LicenseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseListView.swift; sourceTree = "<group>"; };
+		A10000000000000000000005 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		6DCF8E3029EA9E6F00D55A37 /* Patcher.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Patcher.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DCF8E3329EA9E6F00D55A37 /* DerootifierApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DerootifierApp.swift; sourceTree = "<group>"; };
 		6DCF8E3529EA9E6F00D55A37 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -70,7 +102,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6DE2089929F5B80A0053E93D /* FluidGradient in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -81,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				8450CC3F2D06B4D200BFCA94 /* cctools */,
+				A40000000000000000000001 /* ConversionTests.swift */,
 				841E40EE2B14E80300A8B198 /* roothide */,
 				840A948E2C6CA03E00180FFA /* roothide.h */,
 				842F70702ACD265C002E5574 /* Derootifier-Swift-Bridging.h */,
@@ -105,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				6DCF8E3029EA9E6F00D55A37 /* Patcher.app */,
+				A40000000000000000000003 /* PatcherTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -117,6 +150,7 @@
 				6DE2082529EB2E7B0053E93D /* Support */,
 				6DCF8E4629EAB02300D55A37 /* Extensions */,
 				6DCF8E3329EA9E6F00D55A37 /* DerootifierApp.swift */,
+				A10000000000000000000005 /* Localizable.xcstrings */,
 				6DCF8E3729EA9E7100D55A37 /* Assets.xcassets */,
 				6DCF8E3929EA9E7100D55A37 /* Preview Content */,
 			);
@@ -145,6 +179,7 @@
 			isa = PBXGroup;
 			children = (
 				6DE2082629EB2E940053E93D /* ShellScript.swift */,
+				A10000000000000000000001 /* ConversionSession.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -153,6 +188,9 @@
 			isa = PBXGroup;
 			children = (
 				6DCF8E3529EA9E6F00D55A37 /* ContentView.swift */,
+				A10000000000000000000004 /* LicenseListView.swift */,
+				A10000000000000000000003 /* ConversionLogView.swift */,
+				A10000000000000000000002 /* PatcherStyle.swift */,
 				6DE2083129EB46850053E93D /* DocumentPicker.swift */,
 				6DE2088B29F591160053E93D /* CreditsView.swift */,
 			);
@@ -198,6 +236,7 @@
 				6DCF8E2C29EA9E6F00D55A37 /* Sources */,
 				6DCF8E2D29EA9E6F00D55A37 /* Frameworks */,
 				6DCF8E2E29EA9E6F00D55A37 /* Resources */,
+				A30000000000000000000001 /* Collect Licenses */,
 			);
 			buildRules = (
 			);
@@ -205,7 +244,6 @@
 			);
 			name = RootHidePatcher;
 			packageProductDependencies = (
-				6DE2089829F5B80A0053E93D /* FluidGradient */,
 			);
 			productName = Derootifier;
 			productReference = 6DCF8E3029EA9E6F00D55A37 /* Patcher.app */;
@@ -233,16 +271,17 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 6DCF8E2729EA9E6F00D55A37;
 			packageReferences = (
-				6DE2089729F5B80A0053E93D /* XCRemoteSwiftPackageReference "FluidGradient" */,
 			);
 			productRefGroup = 6DCF8E3129EA9E6F00D55A37 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				6DCF8E2F29EA9E6F00D55A37 /* RootHidePatcher */,
+				A40000000000000000000008 /* PatcherTests */,
 			);
 		};
 /* End PBXProject section */
@@ -257,10 +296,25 @@
 				842F706B2ACC3847002E5574 /* patch.sh in Resources */,
 				6DCF8E3B29EA9E7100D55A37 /* Preview Assets.xcassets in Resources */,
 				6DCF8E3829EA9E7100D55A37 /* Assets.xcassets in Resources */,
+				A20000000000000000000005 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+        A30000000000000000000001 /* Collect Licenses */ = {
+            isa = PBXShellScriptBuildPhase;
+            buildActionMask = 2147483647;
+            files = ();
+            inputPaths = ("$(SRCROOT)/LICENSE", "$(SRCROOT)/AuxiliaryExecute/LICENSE");
+            name = "Collect Licenses";
+            outputPaths = ("$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Licenses/RootHidePatcher.txt", "$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/Licenses/AuxiliaryExecute.txt");
+            runOnlyForDeploymentPostprocessing = 0;
+            shellPath = /bin/sh;
+            shellScript = "set -eu\nlicense_dir=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH/Licenses\"\nmkdir -p \"$license_dir\"\ncp \"$SRCROOT/LICENSE\" \"$license_dir/RootHidePatcher.txt\"\ncp \"$SRCROOT/AuxiliaryExecute/LICENSE\" \"$license_dir/AuxiliaryExecute.txt\"\n";
+        };
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6DCF8E2C29EA9E6F00D55A37 /* Sources */ = {
@@ -271,9 +325,12 @@
 				842F70852ACEC1C3002E5574 /* AuxiliaryExecute+Shell.swift in Sources */,
 				842F70832ACEC1BF002E5574 /* AuxiliaryExecute+Async.swift in Sources */,
 				842F70812ACEC1BB002E5574 /* AuxiliaryExecute.swift in Sources */,
-				842F70742ACDC6DC002E5574 /* Makefile in Sources */,
 				845FA8552BE9B603009C564D /* AppFileShare.m in Sources */,
 				6DCF8E3629EA9E6F00D55A37 /* ContentView.swift in Sources */,
+				A20000000000000000000004 /* LicenseListView.swift in Sources */,
+				A20000000000000000000003 /* ConversionLogView.swift in Sources */,
+				A20000000000000000000002 /* PatcherStyle.swift in Sources */,
+				A20000000000000000000001 /* ConversionSession.swift in Sources */,
 				6DE2082C29EB3E990053E93D /* TintedButton.swift in Sources */,
 				6DE2082729EB2E940053E93D /* ShellScript.swift in Sources */,
 				6DE2083229EB46850053E93D /* DocumentPicker.swift in Sources */,
@@ -418,7 +475,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -462,7 +519,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
-				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -512,24 +569,7 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		6DE2089729F5B80A0053E93D /* XCRemoteSwiftPackageReference "FluidGradient" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Cindori/FluidGradient";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 
-/* Begin XCSwiftPackageProductDependency section */
-		6DE2089829F5B80A0053E93D /* FluidGradient */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6DE2089729F5B80A0053E93D /* XCRemoteSwiftPackageReference "FluidGradient" */;
-			productName = FluidGradient;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6DCF8E2829EA9E6F00D55A37 /* Project object */;
 }

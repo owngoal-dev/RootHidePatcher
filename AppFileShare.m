@@ -35,16 +35,16 @@
 
 BOOL IsAppAvailable(NSString* bundleId)
 {
-    LSApplicationProxy *app = [LSApplicationProxy applicationProxyForIdentifier:bundleId];
+    LSApplicationProxy *app = [NSClassFromString(@"LSApplicationProxy") applicationProxyForIdentifier:bundleId];
     return app && app.bundleExecutable;
 }
 
 BOOL ShareFileToApp(NSString* bundleId, NSString* filePath)
 {
-    LSApplicationProxy *app = [LSApplicationProxy applicationProxyForIdentifier:bundleId];
+    LSApplicationProxy *app = [NSClassFromString(@"LSApplicationProxy") applicationProxyForIdentifier:bundleId];
     if(!app || !app.bundleExecutable) return NO;
     
-    NSOperation *op = [[LSApplicationWorkspace defaultWorkspace]
+    NSOperation *op = [[NSClassFromString(@"LSApplicationWorkspace") defaultWorkspace]
                            operationToOpenResource:[NSURL fileURLWithPath:filePath]
                            usingApplication:[app applicationIdentifier] userInfo:nil];
     

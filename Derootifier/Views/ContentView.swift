@@ -1,189 +1,231 @@
-//
-//  ContentView.swift
-//  Derootifier
-//
-//  Created by Анохин Юрий on 15.04.2023.
-//
-
 import SwiftUI
-import FluidGradient
 
 struct ContentView: View {
-    let scriptPath = Bundle.main.path(forResource: "patch", ofType: "sh")!
-    @AppStorage("firstLaunch") private var firstLaunch = true
-    @State private var showingSheet = false
-    @State private var selectedFile: URL?
-    @State private var simpleTweak: Bool = false
-    @State private var usingRootlessCompat: Bool = true
-    @State private var requireDynamicPatches: Bool = false
-    
-    func resetPatches() {
-        simpleTweak = false
-        usingRootlessCompat = true
-        requireDynamicPatches = false
+  @ObservedObject var session: ConversionSession
+  @State private var showingPicker = false
+  @State private var showingAbout = false
+  @State private var shareItem: PatcherShareItem?
+  @State private var pendingImport: URL?
+
+  var body: some View {
+    NavigationView {
+      ScrollViewReader { proxy in
+        Form {
+          packageSection
+          modeSection
+          conversionSection
+          if let result = session.result { resultSection(result) }
+        }
+        .frame(maxWidth: PatcherStyle.readableWidth)
+        .frame(maxWidth: .infinity)
+        .background(PatcherStyle.background.ignoresSafeArea())
+        .onChange(of: session.result?.exitCode) { code in
+          if code != nil { proxy.scrollTo("conversion-result", anchor: .top) }
+        }
+        .navigationTitle("Patcher")
+        .toolbar {
+          ToolbarItem(placement: .navigationBarTrailing) {
+            Button {
+              showingAbout = true
+            } label: {
+              Image(systemName: "info.circle")
+            }
+            .accessibilityLabel("About Patcher")
+          }
+        }
+      }
     }
-    
-    var body: some View {
-        
-        let _ = NotificationCenter.default.addObserver(forName:Notification.Name("patcherFileOpen"), object: nil, queue: nil) { noti in
-            NSLog("RootHidePatcher: patcherFileOpen: \(noti)")
-            UIApplication.shared.keyWindow?.rootViewController?.presentedViewController?.dismiss(animated: true)
-            selectedFile = noti.object as? URL
-            resetPatches()
+    .navigationViewStyle(.stack)
+    .tint(PatcherStyle.accent)
+    .sheet(isPresented: $showingPicker, onDismiss: importPendingFile) {
+      DocumentPicker { url in
+        pendingImport = url
+        showingPicker = false
+      }
+    }
+    .sheet(isPresented: $showingAbout, onDismiss: importPendingFile) { CreditsView() }
+    .sheet(item: $shareItem, onDismiss: importPendingFile) { item in
+      PatcherShareSheet(items: item.items)
+    }
+    .alert(item: $session.issue) { issue in
+      Alert(
+        title: Text(issue.title), message: Text(issue.message), dismissButton: .default(Text("OK")))
+    }
+    .onOpenURL { url in
+      if showingPicker || showingAbout || shareItem != nil {
+        pendingImport = url
+        showingPicker = false
+        showingAbout = false
+        shareItem = nil
+      } else {
+        session.importFile(url)
+      }
+    }
+  }
+
+  private func importPendingFile() {
+    guard let url = pendingImport else { return }
+    pendingImport = nil
+    session.importFile(url)
+  }
+
+  private var packageSection: some View {
+    Section {
+      HStack(alignment: .top, spacing: PatcherStyle.spacing) {
+        Image(systemName: "shippingbox")
+          .font(.title2)
+          .foregroundColor(PatcherStyle.accent)
+          .frame(minWidth: 32, minHeight: 32)
+          .accessibilityHidden(true)
+        VStack(alignment: .leading, spacing: 4) {
+          if let file = session.selectedFile {
+            Text(verbatim: file.lastPathComponent)
+              .font(.headline)
+              .fixedSize(horizontal: false, vertical: true)
+            if let size = session.fileSize {
+              Text(verbatim: size).font(.subheadline).foregroundColor(.secondary)
+            }
+          } else {
+            Text("Choose a package").font(.headline)
+            Text("Convert a jailbreak tweak for RootHide.")
+              .font(.subheadline).foregroundColor(.secondary)
+          }
         }
-        
-        //NavigationView {
-            VStack(spacing: 10) {
-                
-                if let debfile = selectedFile {
-                    Text(debfile.lastPathComponent)
-                        .padding(30)
-                        .opacity(0.5)
-                }
-                
-                Button("Select .deb file") {
-                    UISelectionFeedbackGenerator().selectionChanged()
-                    showingSheet.toggle()
-                }
-                .buttonStyle(TintedButton(color: .white, fullwidth: true))
-                .padding(5)
-                .padding(.leading, 50)
-                .padding(.trailing, 50)
-                .opacity(selectedFile==nil ? 1 : 0.5)
-                
-                if let debfile = selectedFile {
-                    Button("Convert .deb") {
-                        UINotificationFeedbackGenerator().notificationOccurred(.success)
-                        UIApplication.shared.alert(title: "Converting...", body: "Please wait", withButton: false)
-                        DispatchQueue.global().async {
-                            
-                            let name = debfile.deletingPathExtension().lastPathComponent.replacingOccurrences(of: "iphoneos-arm64", with: "-a-r-c-h-").replacingOccurrences(of: "iphoneos-arm", with: "-a-r-c-h-").replacingOccurrences(of: "-a-r-c-h-", with: "iphoneos-arm64e")
-                            
-                            let output = URL.init(fileURLWithPath: "/var/mobile/RootHidePatcher/\(name).deb")
-                            
-                            var patch=""
-                            if usingRootlessCompat { patch="AutoPatches" } else if requireDynamicPatches { patch="DynamicPatches" }
-                            DispatchQueue.main.async {
-                                UIApplication.shared.isIdleTimerDisabled = true
-                            }
-                            let (exitCode,outputAux) = repackDeb(scriptPath: scriptPath, debURL: debfile, outputURL: output, patch: patch)
-                            DispatchQueue.main.async {
-                                UIApplication.shared.isIdleTimerDisabled = false
-                            }
-                            
-                            DispatchQueue.main.async {
-                                UIApplication.shared.dismissAlert(animated: false) {
-                                    if exitCode != 0 {
-                                        UIApplication.shared.alert(title: "Error(\(exitCode))", body: outputAux)
-                                        return
-                                    }
-                                    resetPatches()
-                                    selectedFile = nil
-                                    
-                                    let alert = UIAlertController(title: "Done", message: outputAux, preferredStyle: .alert)
-                                    if IsAppAvailable("org.coolstar.SileoStore") {
-                                        alert.addAction(.init(title: "->Sileo", style: .default, handler: { _ in
-                                            ShareFileToApp("org.coolstar.SileoStore", jbroot(output.path))
-                                        }))
-                                    } else if IsAppAvailable("xyz.willy.Zebra") {
-                                        alert.addAction(.init(title: "->Zebra", style: .default, handler: { _ in
-                                            ShareFileToApp("xyz.willy.Zebra", jbroot(output.path))
-                                        }))
-                                    }
-                                    
-                                    alert.addAction(.init(title: "->Share", style: .default, handler: { _ in
-                                        UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-                                        checkFileMngrs(path: output.path)
-                                    }))
-                                    UIApplication.shared.present(alert: alert)
-                                }
-                            }
-                        }
-                    }
-                    .buttonStyle(TintedButton(color: .white, fullwidth: true))
-                    .padding(30)
-                    .disabled(!simpleTweak && !usingRootlessCompat && !requireDynamicPatches)
-                }
-                
-                
-                if (selectedFile != nil) {
-                    Toggle("Directly Convert Simple Tweaks", isOn: $simpleTweak)
-                        .toggleStyle(SwitchToggleStyle(tint: Color.blue))
-                        .foregroundColor(.white.opacity(0.6))
-                        .frame(width: 300)
-                        .padding(5)
-                        .disabled(false).onChange(of: simpleTweak) { value in
-                            if value {
-                                usingRootlessCompat = false
-                                requireDynamicPatches = false
-                            }
-                        }
-                    Toggle("Rootless Compat Layer", isOn: $usingRootlessCompat)
-                        .toggleStyle(SwitchToggleStyle(tint: Color.blue))
-                        .foregroundColor(.white.opacity(0.9))
-                        .frame(width: 300)
-                        .padding(5)
-                        .disabled(false).onChange(of: usingRootlessCompat) { value in
-                            if value {
-                                simpleTweak = false
-                                requireDynamicPatches = false
-                            }
-                        }
-                    Toggle("Require Dynamic Patches", isOn: $requireDynamicPatches)
-                        .toggleStyle(SwitchToggleStyle(tint: Color.blue))
-                        .foregroundColor(.white.opacity(0.3))
-                        .frame(width: 300)
-                        .padding(5)
-                        .disabled(false).onChange(of: requireDynamicPatches) { value in
-                            if value {
-                                simpleTweak = false
-                                usingRootlessCompat = false
-                            }
-                        }
-                }
-                
-                NavigationLink(
-                    destination: CreditsView(),
-                    label: {
-                        HStack {
-//                            Text("Credits")
-//                            Image(systemName: "chevron.right")
-                            Text("Sileo will be automatically re-opened")
-                        }
-                        .foregroundColor(.white.opacity(0.8))
-                        .font(.system(size: 15))
-                    }
-                )
-                .padding(50)
+      }
+      .padding(.vertical, 8)
+      Button {
+        UISelectionFeedbackGenerator().selectionChanged()
+        showingPicker = true
+      } label: {
+        Label(
+          session.selectedFile == nil ? "Select .deb File" : "Choose Another File",
+          systemImage: "folder")
+      }
+      .disabled(session.isConverting)
+    } header: {
+      Text("Package")
+    } footer: {
+      Text("You can also open a .deb file in Patcher from another app.")
+    }
+  }
+
+  private var modeSection: some View {
+    Section {
+      ForEach(ConversionMode.allCases) { mode in
+        Button {
+          session.mode = mode
+          UISelectionFeedbackGenerator().selectionChanged()
+        } label: {
+          HStack(alignment: .top, spacing: PatcherStyle.spacing) {
+            VStack(alignment: .leading, spacing: 4) {
+              Text(mode.title).font(.body).foregroundColor(.primary)
+              Text(mode.detail)
+                .font(.footnote).foregroundColor(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
             }
-            .padding()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background (
-                FluidGradient(blobs: [.green, .mint],
-                              highlights: [.green, .mint],
-                              speed: 0.5,
-                              blur: 0.80)
-                .background(.green)
-            )
-            .ignoresSafeArea()
-            .onAppear {
-                //                if firstLaunch {
-                //                    UIApplication.shared.alert(title: "Warning", body: "Please make sure the following packages are installed: dpkg, file, odcctools, ldid (from Procursus).")
-                //                    firstLaunch = false
-                //                }
-#if !targetEnvironment(simulator)
-                folderCheck()
-#endif
-            }
-            .sheet(isPresented: $showingSheet) {
-                DocumentPicker(selectedFile: $selectedFile)
-            }
+            Spacer(minLength: 8)
+            Image(systemName: session.mode == mode ? "checkmark.circle.fill" : "circle")
+              .font(.title3)
+              .foregroundColor(session.mode == mode ? PatcherStyle.accent : PatcherStyle.unselected)
+              .accessibilityHidden(true)
+          }
+          .padding(.vertical, 4)
+          .contentShape(Rectangle())
         }
-    //}
+        .accessibilityAddTraits(session.mode == mode ? .isSelected : [])
+        .disabled(session.isConverting)
+      }
+    } header: {
+      Text("Conversion Method")
+    } footer: {
+      Text(
+        "Compatibility depends on the package. Conversion does not guarantee that a tweak will work."
+      )
+    }
+  }
+
+  private var conversionSection: some View {
+    Section {
+      if session.isConverting {
+        HStack(spacing: PatcherStyle.spacing) {
+          ProgressView()
+          VStack(alignment: .leading, spacing: 4) {
+            Text("Converting…").font(.headline)
+            Text("Keep Patcher open until the conversion finishes.")
+              .font(.footnote).foregroundColor(.secondary)
+          }
+        }
+        .padding(.vertical, 8)
+        .accessibilityElement(children: .combine)
+      } else {
+        Button(action: session.convert) {
+          Text(session.result?.succeeded == false ? "Retry Conversion" : "Convert Package")
+            .font(.body.weight(.semibold))
+            .frame(maxWidth: .infinity, minHeight: 28)
+        }
+        .disabled(session.selectedFile == nil)
+      }
+    }
+  }
+
+  private func resultSection(_ result: ConversionResult) -> some View {
+    Section {
+      HStack(alignment: .top, spacing: PatcherStyle.spacing) {
+        Image(
+          systemName: result.succeeded ? "checkmark.circle.fill" : "exclamationmark.circle.fill"
+        )
+        .font(.title2)
+        .foregroundColor(result.succeeded ? PatcherStyle.success : PatcherStyle.failure)
+        .accessibilityHidden(true)
+        VStack(alignment: .leading, spacing: 4) {
+          Text(result.succeeded ? "Conversion Complete" : "Conversion Failed")
+            .font(.headline)
+          if result.succeeded {
+            Text(verbatim: result.output.lastPathComponent)
+              .font(.footnote).foregroundColor(.secondary)
+              .fixedSize(horizontal: false, vertical: true)
+          } else {
+            Text("Exit code: \(result.exitCode)")
+              .font(.footnote).foregroundColor(.secondary)
+            Text("Review the log before trying again.")
+              .font(.footnote).foregroundColor(.secondary)
+          }
+        }
+      }
+      .padding(.vertical, 8)
+      .id("conversion-result")
+      if result.succeeded {
+        ForEach(session.availableManagers, id: \.identifier) { manager in
+          Button {
+            session.openResult(in: manager)
+          } label: {
+            Label(manager.title, systemImage: "arrow.up.forward.app")
+          }
+        }
+        Button {
+          UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+          shareItem = PatcherShareItem(items: [session.resolvedOutput(result)])
+        } label: {
+          Label("Share Package", systemImage: "square.and.arrow.up")
+        }
+      }
+      NavigationLink {
+        ConversionLogView(result: result)
+      } label: {
+        Label("Conversion Log", systemImage: "doc.plaintext")
+      }
+    } header: {
+      Text("Result")
+    } footer: {
+      if result.succeeded {
+        Text("The converted package is ready to share or open in your package manager.")
+      }
+    }
+  }
 }
 
 struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
+  static var previews: some View {
+    ContentView(session: ConversionSession())
+  }
 }

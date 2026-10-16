@@ -1,73 +1,70 @@
-//
-//  CreditsView.swift
-//  Derootifier
-//
-//  Created by Анохин Юрий on 23.04.2023.
-//
-
 import SwiftUI
-import FluidGradient
 
 struct CreditsView: View {
-    var body: some View {
-        NavigationView {
-            ZStack(alignment: .center) {
-                FluidGradient(blobs: [.green, .mint],
-                              highlights: [.green, .mint],
-                              speed: 0.5,
-                              blur: 0.80)
-                .background(.green)
-                .ignoresSafeArea()
-                
-                ScrollView {
-                    VStack {
-                        creditView(imageURL: URL(string: "https://avatars.githubusercontent.com/u/85764897?v=4"), name: "haxi0", description: "Made the app")
-                        creditView(imageURL: URL(string: "https://avatars.githubusercontent.com/u/70823629?v=4"), name: "evelyneee", description: "Helped a lot, gave the idea to make this app")
-                        creditView(imageURL: URL(string: "https://avatars.githubusercontent.com/u/81449663?v=4"), name: "NightwindDev", description: "Tester, massive thanks")
-                        creditView(imageURL: URL(string: "https://avatars.githubusercontent.com/u/80824905?v=4"), name: "korboybeats", description: "Tester, massive thanks")
-                    }
-                    .padding()
-                }
-                .padding()
-                .listStyle(.insetGrouped)
-            }
-        }
-    }
-    
-    private func creditView(imageURL: URL?, name: String, description: String) -> some View {
-        HStack {
-            AsyncImage(url: imageURL, content: { image in
-                image.resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(maxWidth: 35, maxHeight: 35)
-                    .cornerRadius(20)
-            }, placeholder: {
-                ProgressView()
-                    .frame(maxWidth: 35, maxHeight: 35)
-            })
-            
-            VStack(alignment: .leading) {
-                Button(name) {
-                    if let url = URL(string: "https://github.com/\(name)") {
-                        UIApplication.shared.open(url)
-                    }
-                }
-                .font(.headline.weight(.bold))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundColor(.white)
-                
-                Text(description)
-                    .font(.system(size: 13))
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-        }
-        .foregroundColor(.white)
-    }
-}
+  @Environment(\.dismiss) private var dismiss
 
-struct CreditsView_Previews: PreviewProvider {
-    static var previews: some View {
-        CreditsView()
+  var body: some View {
+    NavigationView {
+      Form {
+        Section {
+          VStack(alignment: .leading, spacing: 8) {
+            Text("RootHide Patcher").font(.title2.weight(.semibold))
+            Text("Convert jailbreak tweak packages for RootHide.")
+              .font(.subheadline).foregroundColor(.secondary)
+          }
+          .padding(.vertical, 8)
+          HStack {
+            Text("Version")
+            Spacer()
+            Text(verbatim: version).foregroundColor(.secondary)
+          }
+        }
+        Section {
+          credit("haxi0", detail: "Original app", profile: "haxi0")
+          credit("evelyneee", detail: "Concept and development support", profile: "evelyneee")
+          credit("NightwindDev", detail: "Testing", profile: "NightwindDev")
+          credit("korboybeats", detail: "Testing", profile: "korboybeats")
+        } header: {
+          Text("Acknowledgments")
+        }
+        Section {
+          Link(
+            "RootHide Patcher Source",
+            destination: URL(string: "https://github.com/roothide/RootHidePatcher")!)
+          NavigationLink("Licenses") { LicenseListView() }
+        } header: {
+          Text("Open Source")
+        }
+      }
+      .navigationTitle("About Patcher")
+      .navigationBarTitleDisplayMode(.inline)
+      .toolbar {
+        ToolbarItem(placement: .confirmationAction) {
+          Button("Done") { dismiss() }
+        }
+      }
     }
+    .navigationViewStyle(.stack)
+    .tint(PatcherStyle.accent)
+  }
+
+  private var version: String {
+    let info = Bundle.main.infoDictionary
+    return
+      "\(info?["CFBundleShortVersionString"] as? String ?? "—") (\(info?["CFBundleVersion"] as? String ?? "—"))"
+  }
+
+  private func credit(_ name: String, detail: LocalizedStringKey, profile: String) -> some View {
+    Link(destination: URL(string: "https://github.com/\(profile)")!) {
+      HStack(spacing: PatcherStyle.spacing) {
+        VStack(alignment: .leading, spacing: 4) {
+          Text(verbatim: name).foregroundColor(.primary)
+          Text(detail).font(.footnote).foregroundColor(.secondary)
+        }
+        Spacer()
+        Image(systemName: "arrow.up.right").font(.footnote).foregroundColor(.secondary)
+      }
+      .padding(.vertical, 4)
+    }
+  }
 }
