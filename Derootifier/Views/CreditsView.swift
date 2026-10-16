@@ -5,37 +5,70 @@ struct CreditsView: View {
 
   var body: some View {
     NavigationView {
-      Form {
-        Section {
+      ScrollView {
+        VStack(alignment: .leading, spacing: 22) {
+          VStack(spacing: 10) {
+            AppMark()
+            VStack(spacing: 4) {
+              Text(verbatim: "RootHide Patcher").font(.title2.weight(.bold))
+              Text("Convert jailbreak tweak packages for RootHide.")
+                .font(.subheadline).foregroundColor(.secondary)
+                .multilineTextAlignment(.center)
+            }
+            Text("Version \(version)")
+              .font(.footnote.weight(.medium).monospacedDigit())
+              .foregroundColor(.secondary)
+              .padding(.horizontal, 10)
+              .padding(.vertical, 4)
+              .background(Capsule().fill(PatcherStyle.well))
+          }
+          .frame(maxWidth: .infinity)
+          .padding(.top, 12)
+          .accessibilityElement(children: .combine)
+
           VStack(alignment: .leading, spacing: 8) {
-            Text("RootHide Patcher").font(.title2.weight(.semibold))
-            Text("Convert jailbreak tweak packages for RootHide.")
-              .font(.subheadline).foregroundColor(.secondary)
+            SectionLabel("Acknowledgments")
+            PatcherCard(padding: 0) {
+              VStack(spacing: 0) {
+                credit("haxi0", detail: "Original app")
+                inset
+                credit("evelyneee", detail: "Concept and development support")
+                inset
+                credit("NightwindDev", detail: "Testing")
+                inset
+                credit("korboybeats", detail: "Testing")
+              }
+            }
           }
-          .padding(.vertical, 8)
-          HStack {
-            Text("Version")
-            Spacer()
-            Text(verbatim: version).foregroundColor(.secondary)
+
+          VStack(alignment: .leading, spacing: 8) {
+            SectionLabel("Open Source")
+            PatcherCard(padding: 0) {
+              VStack(spacing: 0) {
+                Link(destination: URL(string: "https://github.com/roothide/RootHidePatcher")!) {
+                  CardRow(title: "RootHide Patcher Source")
+                    .padding(.horizontal, PatcherStyle.gutter)
+                    .padding(.vertical, 6)
+                }
+                .buttonStyle(.plain)
+                inset
+                NavigationLink {
+                  LicenseListView()
+                } label: {
+                  CardRow(title: "Licenses")
+                    .padding(.horizontal, PatcherStyle.gutter)
+                    .padding(.vertical, 6)
+                }
+                .buttonStyle(.plain)
+              }
+            }
           }
         }
-        Section {
-          credit("haxi0", detail: "Original app", profile: "haxi0")
-          credit("evelyneee", detail: "Concept and development support", profile: "evelyneee")
-          credit("NightwindDev", detail: "Testing", profile: "NightwindDev")
-          credit("korboybeats", detail: "Testing", profile: "korboybeats")
-        } header: {
-          Text("Acknowledgments")
-        }
-        Section {
-          Link(
-            "RootHide Patcher Source",
-            destination: URL(string: "https://github.com/roothide/RootHidePatcher")!)
-          NavigationLink("Licenses") { LicenseListView() }
-        } header: {
-          Text("Open Source")
-        }
+        .padding(PatcherStyle.gutter)
+        .frame(maxWidth: PatcherStyle.readableWidth)
+        .frame(maxWidth: .infinity)
       }
+      .background(PatcherStyle.page.ignoresSafeArea())
       .navigationTitle("About Patcher")
       .navigationBarTitleDisplayMode(.inline)
       .toolbar {
@@ -48,23 +81,33 @@ struct CreditsView: View {
     .tint(PatcherStyle.accent)
   }
 
+  private var inset: some View {
+    Divider().padding(.leading, PatcherStyle.gutter)
+  }
+
   private var version: String {
     let info = Bundle.main.infoDictionary
     return
       "\(info?["CFBundleShortVersionString"] as? String ?? "—") (\(info?["CFBundleVersion"] as? String ?? "—"))"
   }
 
-  private func credit(_ name: String, detail: LocalizedStringKey, profile: String) -> some View {
-    Link(destination: URL(string: "https://github.com/\(profile)")!) {
+  private func credit(_ name: String, detail: LocalizedStringKey) -> some View {
+    Link(destination: URL(string: "https://github.com/\(name)")!) {
       HStack(spacing: PatcherStyle.spacing) {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 2) {
           Text(verbatim: name).foregroundColor(.primary)
           Text(detail).font(.footnote).foregroundColor(.secondary)
         }
         Spacer()
-        Image(systemName: "arrow.up.right").font(.footnote).foregroundColor(.secondary)
+        Image(systemName: "arrow.up.right")
+          .font(.footnote.weight(.semibold))
+          .foregroundColor(Color(uiColor: .tertiaryLabel))
+          .accessibilityHidden(true)
       }
-      .padding(.vertical, 4)
+      .padding(.horizontal, PatcherStyle.gutter)
+      .padding(.vertical, 10)
+      .contentShape(Rectangle())
     }
+    .buttonStyle(.plain)
   }
 }

@@ -1,6 +1,23 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "About": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "关于"
+          }
+        }
+      }
+    },
     "About Patcher": {
       "extractionState": "manual",
       "localizations": {
@@ -35,23 +52,6 @@
         }
       }
     },
-    "Choose a package": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Choose a package"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "选择安装包"
-          }
-        }
-      }
-    },
     "Choose Another File": {
       "extractionState": "manual",
       "localizations": {
@@ -65,23 +65,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "选择其他文件"
-          }
-        }
-      }
-    },
-    "Compatibility depends on the package. Conversion does not guarantee that a tweak will work.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Compatibility depends on the package. Conversion does not guarantee that a tweak will work."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "兼容性取决于安装包，转换成功不代表插件一定可以正常使用。"
           }
         }
       }
@@ -137,23 +120,6 @@
         }
       }
     },
-    "Conversion in Progress": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Conversion in Progress"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "正在转换"
-          }
-        }
-      }
-    },
     "Conversion Log": {
       "extractionState": "manual",
       "localizations": {
@@ -188,6 +154,23 @@
         }
       }
     },
+    "Conversion in Progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Conversion in Progress"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在转换"
+          }
+        }
+      }
+    },
     "Conversion requires a device with a RootHide environment. The simulator can preview the interface only.": {
       "extractionState": "manual",
       "localizations": {
@@ -205,19 +188,19 @@
         }
       }
     },
-    "Convert a jailbreak tweak for RootHide.": {
+    "Convert": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Convert a jailbreak tweak for RootHide."
+            "value": "Convert"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "将越狱插件转换为 RootHide 可用的安装包。"
+            "value": "转换"
           }
         }
       }
@@ -235,23 +218,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "为 RootHide 转换越狱插件安装包。"
-          }
-        }
-      }
-    },
-    "Convert Package": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Convert Package"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "转换安装包"
           }
         }
       }
@@ -375,6 +341,40 @@
         }
       }
     },
+    "Export": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "导出"
+          }
+        }
+      }
+    },
+    "File": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "文件"
+          }
+        }
+      }
+    },
     "For simple tweaks. Also supports eligible rootful packages.": {
       "extractionState": "manual",
       "localizations": {
@@ -392,23 +392,6 @@
         }
       }
     },
-    "Keep Patcher open until the conversion finishes.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Keep Patcher open until the conversion finishes."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "转换完成前，请保持 Patcher 在前台运行。"
-          }
-        }
-      }
-    },
     "Licenses": {
       "extractionState": "manual",
       "localizations": {
@@ -422,6 +405,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "开源许可"
+          }
+        }
+      }
+    },
+    "Log": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Log"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日志"
           }
         }
       }
@@ -477,6 +477,23 @@
         }
       }
     },
+    "Open Source": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Source"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "开源"
+          }
+        }
+      }
+    },
     "Open in Sileo": {
       "extractionState": "manual",
       "localizations": {
@@ -511,23 +528,6 @@
         }
       }
     },
-    "Open Source": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Open Source"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "开源"
-          }
-        }
-      }
-    },
     "Original app": {
       "extractionState": "manual",
       "localizations": {
@@ -541,23 +541,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "原始应用开发"
-          }
-        }
-      }
-    },
-    "Package": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Package"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "安装包"
           }
         }
       }
@@ -596,70 +579,19 @@
         }
       }
     },
-    "Result": {
+    "Retry": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Result"
+            "value": "Retry"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "转换结果"
-          }
-        }
-      }
-    },
-    "Retry Conversion": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Retry Conversion"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "重新转换"
-          }
-        }
-      }
-    },
-    "Review the log before trying again.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Review the log before trying again."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "请查看日志后再重试。"
-          }
-        }
-      }
-    },
-    "RootHide Patcher": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RootHide Patcher"
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "RootHide Patcher"
+            "value": "重试"
           }
         }
       }
@@ -698,19 +630,36 @@
         }
       }
     },
-    "Select .deb File": {
+    "Save to Files": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Select .deb File"
+            "value": "Save to Files"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "选择 .deb 文件"
+            "value": "存储到文件"
+          }
+        }
+      }
+    },
+    "Select Package": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Select Package"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "选择安装包"
           }
         }
       }
@@ -732,6 +681,23 @@
         }
       }
     },
+    "Share": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分享"
+          }
+        }
+      }
+    },
     "Share Log": {
       "extractionState": "manual",
       "localizations": {
@@ -749,19 +715,19 @@
         }
       }
     },
-    "Share Package": {
+    "Shows the options.": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Share Package"
+            "value": "Shows the options."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "分享安装包"
+            "value": "展开选项。"
           }
         }
       }
@@ -796,23 +762,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "当前安装缺少转换脚本。"
-          }
-        }
-      }
-    },
-    "The converted package is ready to share or open in your package manager.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "The converted package is ready to share or open in your package manager."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "现在可以分享安装包，或使用软件包管理器打开。"
           }
         }
       }
@@ -902,19 +851,19 @@
         }
       }
     },
-    "Version": {
+    "Version %@": {
       "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Version"
+            "value": "Version %@"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "translated",
-            "value": "版本"
+            "value": "版本 %@"
           }
         }
       }
@@ -932,23 +881,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "请等待当前转换完成，再打开其他安装包。"
-          }
-        }
-      }
-    },
-    "You can also open a .deb file in Patcher from another app.": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "You can also open a .deb file in Patcher from another app."
-          }
-        },
-        "zh-Hans": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "也可以从其他应用中将 .deb 文件打开到 Patcher。"
           }
         }
       }

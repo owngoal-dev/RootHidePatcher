@@ -32,6 +32,7 @@ A4000000000000000000000B = {isa = XCBuildConfiguration; name = Release; buildSet
 /* Begin PBXBuildFile section */
 		A20000000000000000000001 /* ConversionSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000001 /* ConversionSession.swift */; };
 		A20000000000000000000002 /* PatcherStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000002 /* PatcherStyle.swift */; };
+		A20000000000000000000010 /* PatcherControls.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000010 /* PatcherControls.swift */; };
 		A20000000000000000000003 /* ConversionLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000003 /* ConversionLogView.swift */; };
 		A20000000000000000000004 /* LicenseListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000004 /* LicenseListView.swift */; };
 		A20000000000000000000005 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000005 /* Localizable.xcstrings */; };
@@ -58,6 +59,7 @@ A4000000000000000000000B = {isa = XCBuildConfiguration; name = Release; buildSet
 
 /* Begin PBXFileReference section */
 		A10000000000000000000001 /* ConversionSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionSession.swift; sourceTree = "<group>"; };
+		A10000000000000000000010 /* PatcherControls.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatcherControls.swift; sourceTree = "<group>"; };
 		A10000000000000000000002 /* PatcherStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatcherStyle.swift; sourceTree = "<group>"; };
 		A10000000000000000000003 /* ConversionLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionLogView.swift; sourceTree = "<group>"; };
 		A10000000000000000000004 /* LicenseListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseListView.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@ A4000000000000000000000B = {isa = XCBuildConfiguration; name = Release; buildSet
 				6DCF8E3529EA9E6F00D55A37 /* ContentView.swift */,
 				A10000000000000000000004 /* LicenseListView.swift */,
 				A10000000000000000000003 /* ConversionLogView.swift */,
+				A10000000000000000000010 /* PatcherControls.swift */,
 				A10000000000000000000002 /* PatcherStyle.swift */,
 				6DE2083129EB46850053E93D /* DocumentPicker.swift */,
 				6DE2088B29F591160053E93D /* CreditsView.swift */,
@@ -329,6 +332,7 @@ A4000000000000000000000B = {isa = XCBuildConfiguration; name = Release; buildSet
 				6DCF8E3629EA9E6F00D55A37 /* ContentView.swift in Sources */,
 				A20000000000000000000004 /* LicenseListView.swift in Sources */,
 				A20000000000000000000003 /* ConversionLogView.swift in Sources */,
+				A20000000000000000000010 /* PatcherControls.swift in Sources */,
 				A20000000000000000000002 /* PatcherStyle.swift in Sources */,
 				A20000000000000000000001 /* ConversionSession.swift in Sources */,
 				6DE2082C29EB3E990053E93D /* TintedButton.swift in Sources */,
@@ -476,7 +480,7 @@ A4000000000000000000000B = {isa = XCBuildConfiguration; name = Release; buildSet
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -520,7 +524,7 @@ A4000000000000000000000B = {isa = XCBuildConfiguration; name = Release; buildSet
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (

@@ -1,39 +1,77 @@
 import SwiftUI
 
+/// One button in the middle, options in a drawer below it.
 struct ContentView: View {
   @ObservedObject var session: ConversionSession
   @State private var showingPicker = false
   @State private var showingAbout = false
   @State private var shareItem: PatcherShareItem?
+  @State private var exportItem: PatcherShareItem?
   @State private var pendingImport: URL?
+  @State private var drawerOpen = false
+  @State private var drawerHeight: CGFloat = 0
+  @State private var showingLog = false
+  /// Export was tapped: the button has split into the places a package can go.
+  @Environment(\.verticalSizeClass) private var verticalSizeClass
+  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+  @State private var choosingExport = false
 
   var body: some View {
     NavigationView {
-      ScrollViewReader { proxy in
-        Form {
-          packageSection
-          modeSection
-          conversionSection
-          if let result = session.result { resultSection(result) }
-        }
-        .frame(maxWidth: PatcherStyle.readableWidth)
-        .frame(maxWidth: .infinity)
-        .background(PatcherStyle.background.ignoresSafeArea())
-        .onChange(of: session.result?.exitCode) { code in
-          if code != nil { proxy.scrollTo("conversion-result", anchor: .top) }
-        }
-        .navigationTitle("Patcher")
-        .toolbar {
-          ToolbarItem(placement: .navigationBarTrailing) {
-            Button {
-              showingAbout = true
-            } label: {
-              Image(systemName: "info.circle")
-            }
-            .accessibilityLabel("About Patcher")
+      ZStack(alignment: .bottom) {
+        PatcherStyle.page.ignoresSafeArea()
+        GeometryReader { geometry in
+          let lift = lift(in: geometry.size.height)
+          ScrollView {
+            main
+              .padding(.horizontal, PatcherStyle.gutter)
+              // Clear of the wordmark above and the drawer's pill below.
+              .padding(.top, 44)
+              .padding(.bottom, 60)
+              .frame(maxWidth: .infinity, minHeight: geometry.size.height)
+              // The page makes room for the open drawer instead of sitting under it.
+              .offset(y: -lift.offset)
+              .opacity(lift.opacity)
           }
         }
+        VStack {
+          wordmark
+          Spacer()
+        }
+        if drawerOpen {
+          // Tapping the page above closes the drawer, before anything on it.
+          Color.clear
+            .contentShape(Rectangle())
+            .ignoresSafeArea()
+            .onTapGesture { withAnimation(OptionsDrawer.spring) { drawerOpen = false } }
+            .accessibilityHidden(true)
+        }
+        OptionsDrawer(
+          session: session, isOpen: $drawerOpen, cardHeight: $drawerHeight,
+          chooseAnother: {
+            withAnimation(OptionsDrawer.spring) { drawerOpen = false }
+            choosePackage()
+          },
+          showLog: {
+            withAnimation(OptionsDrawer.spring) { drawerOpen = false }
+            showingLog = true
+          },
+          showAbout: {
+            withAnimation(OptionsDrawer.spring) { drawerOpen = false }
+            showingAbout = true
+          }
+        )
+        if let result = session.result {
+          NavigationLink(isActive: $showingLog) {
+            ConversionLogView(result: result)
+          } label: {
+            EmptyView()
+          }
+          .hidden()
+        }
       }
+      .navigationTitle("Patcher")
+      .navigationBarHidden(true)
     }
     .navigationViewStyle(.stack)
     .tint(PatcherStyle.accent)
@@ -47,180 +85,158 @@ struct ContentView: View {
     .sheet(item: $shareItem, onDismiss: importPendingFile) { item in
       PatcherShareSheet(items: item.items)
     }
+    .sheet(item: $exportItem, onDismiss: importPendingFile) { item in
+      if let url = item.items.first as? URL { FileExporter(url: url) }
+    }
     .alert(item: $session.issue) { issue in
       Alert(
         title: Text(issue.title), message: Text(issue.message), dismissButton: .default(Text("OK")))
     }
     .onOpenURL { url in
-      if showingPicker || showingAbout || shareItem != nil {
+      if showingPicker || showingAbout || shareItem != nil || exportItem != nil {
         pendingImport = url
         showingPicker = false
         showingAbout = false
         shareItem = nil
+        exportItem = nil
       } else {
-        session.importFile(url)
+        convert(url)
       }
     }
+    // A new package or a new run puts the single button back.
+    .onChange(of: session.isConverting) { converting in if converting { choosingExport = false } }
+    .onChange(of: session.selectedFile) { _ in choosingExport = false }
+  }
+
+  // MARK: Actions
+
+  /// A package goes straight into conversion, from the picker or another app.
+  private func convert(_ url: URL) {
+    session.importFile(url)
+    guard session.issue == nil, session.selectedFile != nil, !session.isConverting else { return }
+    session.convert()
   }
 
   private func importPendingFile() {
     guard let url = pendingImport else { return }
     pendingImport = nil
-    session.importFile(url)
+    convert(url)
   }
 
-  private var packageSection: some View {
-    Section {
-      HStack(alignment: .top, spacing: PatcherStyle.spacing) {
-        Image(systemName: "shippingbox")
-          .font(.title2)
-          .foregroundColor(PatcherStyle.accent)
-          .frame(minWidth: 32, minHeight: 32)
-          .accessibilityHidden(true)
-        VStack(alignment: .leading, spacing: 4) {
-          if let file = session.selectedFile {
-            Text(verbatim: file.lastPathComponent)
-              .font(.headline)
-              .fixedSize(horizontal: false, vertical: true)
-            if let size = session.fileSize {
-              Text(verbatim: size).font(.subheadline).foregroundColor(.secondary)
-            }
-          } else {
-            Text("Choose a package").font(.headline)
-            Text("Convert a jailbreak tweak for RootHide.")
-              .font(.subheadline).foregroundColor(.secondary)
-          }
-        }
-      }
-      .padding(.vertical, 8)
-      Button {
-        UISelectionFeedbackGenerator().selectionChanged()
-        showingPicker = true
-      } label: {
-        Label(
-          session.selectedFile == nil ? "Select .deb File" : "Choose Another File",
-          systemImage: "folder")
-      }
-      .disabled(session.isConverting)
-    } header: {
-      Text("Package")
-    } footer: {
-      Text("You can also open a .deb file in Patcher from another app.")
+  private func choosePackage() {
+    UISelectionFeedbackGenerator().selectionChanged()
+    showingPicker = true
+  }
+
+  private var action: MainAction {
+    if session.isConverting { return .converting }
+    if let result = session.result {
+      if result.succeeded && session.selectedFile == nil { return .export }
+      if !result.succeeded { return .retry }
+    }
+    return session.selectedFile == nil ? .choose : .convert
+  }
+
+  private func perform() {
+    switch action {
+    case .choose: choosePackage()
+    case .convert, .retry: session.convert()
+    case .export:
+      UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+      // A soft spring, so the division overshoots a little and settles.
+      withAnimation(.spring(response: 0.55, dampingFraction: 0.68)) { choosingExport = true }
+    case .converting: break
     }
   }
 
-  private var modeSection: some View {
-    Section {
-      ForEach(ConversionMode.allCases) { mode in
-        Button {
-          session.mode = mode
-          UISelectionFeedbackGenerator().selectionChanged()
-        } label: {
-          HStack(alignment: .top, spacing: PatcherStyle.spacing) {
-            VStack(alignment: .leading, spacing: 4) {
-              Text(mode.title).font(.body).foregroundColor(.primary)
-              Text(mode.detail)
-                .font(.footnote).foregroundColor(.secondary)
-                .fixedSize(horizontal: false, vertical: true)
-            }
-            Spacer(minLength: 8)
-            Image(systemName: session.mode == mode ? "checkmark.circle.fill" : "circle")
-              .font(.title3)
-              .foregroundColor(session.mode == mode ? PatcherStyle.accent : PatcherStyle.unselected)
-              .accessibilityHidden(true)
-          }
-          .padding(.vertical, 4)
-          .contentShape(Rectangle())
-        }
-        .accessibilityAddTraits(session.mode == mode ? .isSelected : [])
-        .disabled(session.isConverting)
-      }
-    } header: {
-      Text("Conversion Method")
-    } footer: {
-      Text(
-        "Compatibility depends on the package. Conversion does not guarantee that a tweak will work."
-      )
-    }
+  // MARK: Layout
+
+  /// How far the page rises to stay clear of the open drawer, centring the
+  /// tile in the space left above it. Where that space is too short for the
+  /// tile, as on a phone on its side, the page drifts up and fades instead,
+  /// and comes back when the drawer closes.
+  private func lift(in height: CGFloat) -> (offset: CGFloat, opacity: Double) {
+    guard drawerOpen else { return (0, 1) }
+    let pill: CGFloat = 60
+    let rise = max(drawerHeight - pill, 0) / 2
+    let room = height - drawerHeight - 44
+    let fits = room >= tileSide + 60
+    return fits ? (rise, 1) : (rise + 40, 0)
   }
 
-  private var conversionSection: some View {
-    Section {
-      if session.isConverting {
-        HStack(spacing: PatcherStyle.spacing) {
-          ProgressView()
-          VStack(alignment: .leading, spacing: 4) {
-            Text("Converting…").font(.headline)
-            Text("Keep Patcher open until the conversion finishes.")
-              .font(.footnote).foregroundColor(.secondary)
-          }
-        }
-        .padding(.vertical, 8)
+  private var tileSide: CGFloat {
+    if verticalSizeClass == .compact { return 150 }
+    return horizontalSizeClass == .regular ? 260 : 216
+  }
+
+  /// The tile, and at most one quiet line under it.
+  private var main: some View {
+    VStack(spacing: 22) {
+      PackageTile(
+        action: action, routes: routes, isSplit: choosingExport, side: tileSide,
+        perform: perform)
+      caption
+        .font(.footnote)
+        .foregroundColor(.secondary)
+        .lineLimit(1)
+        .truncationMode(.middle)
+        .frame(maxWidth: 300, minHeight: 18)
         .accessibilityElement(children: .combine)
-      } else {
-        Button(action: session.convert) {
-          Text(session.result?.succeeded == false ? "Retry Conversion" : "Convert Package")
-            .font(.body.weight(.semibold))
-            .frame(maxWidth: .infinity, minHeight: 28)
+    }
+  }
+
+  /// A small mark of the app at the top, far enough from the tile to stay quiet.
+  private var wordmark: some View {
+    HStack(spacing: 8) {
+      AppMark(size: 22)
+      Text(verbatim: "RootHide Patcher")
+        .font(.footnote.weight(.semibold))
+        .foregroundColor(.secondary)
+    }
+    .padding(.top, 12)
+    .accessibilityElement(children: .combine)
+    .accessibilityAddTraits(.isHeader)
+  }
+
+  @ViewBuilder private var caption: some View {
+    switch action {
+    case .choose:
+      // What the tool does, in its own terms.
+      Text(verbatim: "rootless · rootful → roothide")
+        .font(.system(.footnote, design: .monospaced))
+    case .converting, .convert:
+      if let file = session.selectedFile { Text(verbatim: file.lastPathComponent) }
+    case .export:
+      if let result = session.result {
+        HStack(spacing: 5) {
+          Image(systemName: "checkmark.circle.fill").foregroundColor(PatcherStyle.success)
+          Text(verbatim: result.output.lastPathComponent)
         }
-        .disabled(session.selectedFile == nil)
+      }
+    case .retry:
+      if let result = session.result {
+        Text("Conversion Failed") + Text(verbatim: " · ") + Text("Exit code: \(result.exitCode)")
       }
     }
   }
 
-  private func resultSection(_ result: ConversionResult) -> some View {
-    Section {
-      HStack(alignment: .top, spacing: PatcherStyle.spacing) {
-        Image(
-          systemName: result.succeeded ? "checkmark.circle.fill" : "exclamationmark.circle.fill"
-        )
-        .font(.title2)
-        .foregroundColor(result.succeeded ? PatcherStyle.success : PatcherStyle.failure)
-        .accessibilityHidden(true)
-        VStack(alignment: .leading, spacing: 4) {
-          Text(result.succeeded ? "Conversion Complete" : "Conversion Failed")
-            .font(.headline)
-          if result.succeeded {
-            Text(verbatim: result.output.lastPathComponent)
-              .font(.footnote).foregroundColor(.secondary)
-              .fixedSize(horizontal: false, vertical: true)
-          } else {
-            Text("Exit code: \(result.exitCode)")
-              .font(.footnote).foregroundColor(.secondary)
-            Text("Review the log before trying again.")
-              .font(.footnote).foregroundColor(.secondary)
-          }
+  /// The destinations the tile divides into on Export.
+  private var routes: [ExportRoute] {
+    guard action == .export, let result = session.result else { return [] }
+    let output = session.resolvedOutput(result)
+    return [
+      ExportRoute(id: "share", title: String(localized: "Share"), symbol: "square.and.arrow.up") {
+        shareItem = PatcherShareItem(items: [output])
+      },
+      ExportRoute(id: "files", title: String(localized: "Save to Files"), symbol: "folder") {
+        exportItem = PatcherShareItem(items: [output])
+      },
+    ]
+      + session.availableManagers.map { manager in
+        ExportRoute(id: manager.identifier, title: manager.title, symbol: "arrow.up.forward.app") {
+          session.openResult(in: manager)
         }
       }
-      .padding(.vertical, 8)
-      .id("conversion-result")
-      if result.succeeded {
-        ForEach(session.availableManagers, id: \.identifier) { manager in
-          Button {
-            session.openResult(in: manager)
-          } label: {
-            Label(manager.title, systemImage: "arrow.up.forward.app")
-          }
-        }
-        Button {
-          UIImpactFeedbackGenerator(style: .soft).impactOccurred()
-          shareItem = PatcherShareItem(items: [session.resolvedOutput(result)])
-        } label: {
-          Label("Share Package", systemImage: "square.and.arrow.up")
-        }
-      }
-      NavigationLink {
-        ConversionLogView(result: result)
-      } label: {
-        Label("Conversion Log", systemImage: "doc.plaintext")
-      }
-    } header: {
-      Text("Result")
-    } footer: {
-      if result.succeeded {
-        Text("The converted package is ready to share or open in your package manager.")
-      }
-    }
   }
 }
 
