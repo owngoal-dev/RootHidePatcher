@@ -24,7 +24,7 @@ final class ConversionTests: XCTestCase {
   }
 
   @MainActor
-  func testImportPreservesSourceAndResetsMode() throws {
+  func testImportPreservesSourceAndKeepsMode() throws {
     let source = try fixture()
     defer { try? FileManager.default.removeItem(at: source.deletingLastPathComponent()) }
     let session = ConversionSession()
@@ -32,7 +32,7 @@ final class ConversionTests: XCTestCase {
     session.mode = .dynamic
     session.importFile(source)
     XCTAssertNil(session.issue)
-    XCTAssertEqual(session.mode, .compatibility)
+    XCTAssertEqual(session.mode, .dynamic)
     let imported = try XCTUnwrap(session.selectedFile)
     defer { try? FileManager.default.removeItem(at: imported) }
     XCTAssertNotEqual(imported, source)

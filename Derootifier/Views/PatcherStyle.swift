@@ -136,9 +136,13 @@ struct PatcherShareItem: Identifiable {
 /// Presented as a SwiftUI sheet, which also supplies the iPad presentation context.
 struct PatcherShareSheet: UIViewControllerRepresentable {
   let items: [Any]
+  /// The sheet dismisses itself when the user finishes; this tells SwiftUI.
+  var onFinish: () -> Void = {}
 
   func makeUIViewController(context: Context) -> UIActivityViewController {
-    UIActivityViewController(activityItems: items, applicationActivities: nil)
+    let controller = UIActivityViewController(activityItems: items, applicationActivities: nil)
+    controller.completionWithItemsHandler = { _, _, _, _ in onFinish() }
+    return controller
   }
 
   func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}

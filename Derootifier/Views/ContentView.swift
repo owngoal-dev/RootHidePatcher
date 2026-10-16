@@ -1,4 +1,5 @@
 import SwiftUI
+import UniformTypeIdentifiers
 
 /// One button in the middle, options in a drawer below it.
 struct ContentView: View {
@@ -75,18 +76,25 @@ struct ContentView: View {
     }
     .navigationViewStyle(.stack)
     .tint(PatcherStyle.accent)
-    .sheet(isPresented: $showingPicker, onDismiss: importPendingFile) {
-      DocumentPicker { url in
-        pendingImport = url
-        showingPicker = false
+    // SwiftUI's own importer: a picker that closes itself after a pick does not
+    // reliably reach a sheet's onDismiss, so the package is taken from here.
+    .fileImporter(isPresented: $showingPicker, allowedContentTypes: [.item]) { picked in
+      switch picked {
+      case .success(let url): convert(url)
+      case .failure(let error):
+        session.issue = PatcherIssue(
+          title: String(localized: "Unable to Import"), message: error.localizedDescription)
       }
+    }
+    .onChange(of: showingPicker) { open in
+      if !open { DispatchQueue.main.async { importPendingFile() } }
     }
     .sheet(isPresented: $showingAbout, onDismiss: importPendingFile) { CreditsView() }
     .sheet(item: $shareItem, onDismiss: importPendingFile) { item in
-      PatcherShareSheet(items: item.items)
+      PatcherShareSheet(items: item.items) { shareItem = nil }
     }
     .sheet(item: $exportItem, onDismiss: importPendingFile) { item in
-      if let url = item.items.first as? URL { FileExporter(url: url) }
+      if let url = item.items.first as? URL { FileExporter(url: url) { exportItem = nil } }
     }
     .alert(item: $session.issue) { issue in
       Alert(

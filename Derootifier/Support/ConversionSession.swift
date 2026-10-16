@@ -124,7 +124,7 @@ final class ConversionSession: ObservableObject {
       fileSize = values.fileSize.map {
         ByteCountFormatter.string(fromByteCount: Int64($0), countStyle: .file)
       }
-      mode = .compatibility
+      // The method is chosen before the package and is kept between packages.
       result = nil
     } catch {
       issue = PatcherIssue(
@@ -165,7 +165,6 @@ final class ConversionSession: ObservableObject {
           if code == 0 {
             self.selectedFile = nil
             self.fileSize = nil
-            self.mode = .compatibility
           }
           UINotificationFeedbackGenerator().notificationOccurred(code == 0 ? .success : .error)
         }

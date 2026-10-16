@@ -58,6 +58,6 @@ struct ConversionLogView: View {
         .accessibilityLabel("Log Actions")
       }
     }
-    .sheet(item: $shareItem) { item in PatcherShareSheet(items: item.items) }
+    .sheet(item: $shareItem) { item in PatcherShareSheet(items: item.items) { shareItem = nil } }
   }
 }

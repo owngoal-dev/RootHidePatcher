@@ -477,10 +477,29 @@ private struct ChipPressStyle: ButtonStyle {
 /// Presents the system's "save to Files" picker for a copy of the package.
 struct FileExporter: UIViewControllerRepresentable {
   let url: URL
+  /// The picker dismisses itself on save or cancel; this tells SwiftUI, which
+  /// would otherwise think it still on screen and never present it again.
+  let onFinish: () -> Void
 
   func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-    UIDocumentPickerViewController(forExporting: [url], asCopy: true)
+    let picker = UIDocumentPickerViewController(forExporting: [url], asCopy: true)
+    picker.delegate = context.coordinator
+    return picker
   }
 
   func updateUIViewController(_ controller: UIDocumentPickerViewController, context: Context) {}
+  func makeCoordinator() -> Coordinator { Coordinator(onFinish: onFinish) }
+
+  final class Coordinator: NSObject, UIDocumentPickerDelegate {
+    let onFinish: () -> Void
+    init(onFinish: @escaping () -> Void) { self.onFinish = onFinish }
+
+    func documentPicker(
+      _ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]
+    ) {
+      onFinish()
+    }
+
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) { onFinish() }
+  }
 }
