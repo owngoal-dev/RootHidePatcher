@@ -5,14 +5,15 @@ set -e
 cd "$(dirname "$0")"
 
 WORKING_LOCATION="$(pwd)"
-APPLICATION_NAME=Derootifier
+PROJECT_NAME=UmbraPatcher
+APPLICATION_NAME=Patcher
 rm -rf build
 mkdir build
 
 cd build
 
-xcodebuild -project "$WORKING_LOCATION/$APPLICATION_NAME.xcodeproj" \
-    -scheme "$APPLICATION_NAME" \
+xcodebuild -project "$WORKING_LOCATION/$PROJECT_NAME.xcodeproj" \
+    -scheme "$PROJECT_NAME" \
     -configuration Release \
     -derivedDataPath "$WORKING_LOCATION/build/DerivedDataApp" \
     -destination 'generic/platform=iOS' \
@@ -24,7 +25,7 @@ DD_APP_PATH="$WORKING_LOCATION/build/DerivedDataApp/Build/Products/Release-iphon
 TARGET_APP="$WORKING_LOCATION/build/$APPLICATION_NAME.app"
 cp -r "$DD_APP_PATH" "$TARGET_APP"
 
-codesign --remove "$TARGET_APP"
+codesign --remove-signature "$TARGET_APP"
 if [ -e "$TARGET_APP/_CodeSignature" ]; then
     rm -rf "$TARGET_APP/_CodeSignature"
 fi
@@ -34,9 +35,9 @@ fi
 
 ldid -S"$WORKING_LOCATION/entitlements.plist" "$TARGET_APP/$APPLICATION_NAME"
 mkdir Payload
-cp -r Derootifier.app Payload/Derootifier.app
-zip -vr Derootifier.ipa Payload
-rm -rf Derootifier.app
+cp -r Patcher.app Payload/Patcher.app
+zip -vr UmbraPatcher.ipa Payload
+rm -rf Patcher.app
 rm -rf DerivedDataApp
 rm -rf Payload
-zip -vr share.zip Derootifier.ipa
+zip -vr share.zip UmbraPatcher.ipa

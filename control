@@ -1,12 +1,13 @@
-Package: com.roothide.patcher
-Name: RootHide Patcher
-Version: 2.1.4
+Package: wiki.qaq.umbra.patcher
+Name: Umbra Patcher
+Version: 3.0
 Architecture: iphoneos-arm64e
 Depends: firmware (>= 15.0), libxar1, ldid, file, dpkg, gawk, plutil(>= 0.2.2-1), uikittools(>= 2.1.6-4)
-Description: patch rootless package to roothide, not work for all packages.
-Maintainer: roothide
-Author: roothide
+Description: Convert supported tweak packages for RootHide custom firmware.
+Maintainer: OwnGoal Studio <not-gonna-reply@owngoal.dev>
+Author: OwnGoal Studio <not-gonna-reply@owngoal.dev>
 Section: Utilities
-Icon: https://github.com/roothide/RootHidePatcher/blob/master/derootifier-2-modified.png?raw=true
-Depiction: https://github.com/roothide/RootHidePatcher
-Support: https://github.com/roothide/RootHidePatcher
+Homepage: https://github.com/owngoal-dev/RootHidePatcher
+Support: https://github.com/owngoal-dev/RootHidePatcher/issues
+Conflicts: com.roothide.patcher
+Replaces: com.roothide.patcher
