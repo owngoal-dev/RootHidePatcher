@@ -18,7 +18,7 @@ Choose a method in the bottom drawer, then select a `.deb` or open one from anot
 | Rootless Compatibility (default) | `AutoPatches` | Apply the Rootless Compat Layer integration. |
 | Dynamic Patches | `DynamicPatches` | Require the matching dynamic patch package. |
 
-Successful packages can be shared (including Save to Files) or opened in a supported package manager. Irisin takes precedence over Sileo when installed; Zebra is also offered when available. Failed conversions retain the selected file and method for retry. Conversion logs can be selected, copied, and shared.
+Successful packages can be shared (including Save to Files) or opened in a supported package manager. A single package-manager action is shown for the first installed app in this order: Irisin, Sileo, then Zebra. Failed conversions retain the selected file and method for retry. Conversion logs can be selected, copied, and shared.
 
 ### Identity and upgrade
 
@@ -64,7 +64,7 @@ The app icon and in-app mark share the approved `arm64e` artwork in `Branding/Um
 
 Umbra Patcher 是 OwnGoal Studio 基于 RootHide Patcher 派生的安装包转换工具，保留原有转换引擎，提供重新设计的界面。需要 iOS 15 或更新版本及可用的 RootHide 自定义固件环境，并非所有安装包均兼容。
 
-在底部抽屉选择转换方式，再选择 `.deb` 或从其他 App 打开安装包，即可按当前方式开始转换。支持直接转换、Rootless 兼容层和动态补丁三种方式。转换成功后可分享或交给包管理器；已安装 Irisin 时优先使用 Irisin，否则回退至 Sileo。Zebra 已安装时也会提供入口。“存储到文件”位于系统分享菜单中。
+在底部抽屉选择转换方式，再选择 `.deb` 或从其他 App 打开安装包，即可按当前方式开始转换。支持直接转换、Rootless 兼容层和动态补丁三种方式。转换成功后可分享或交给包管理器；仅显示一个包管理器入口，按 Irisin → Sileo → Zebra 的顺序选择已安装项。“存储到文件”位于系统分享菜单中。
 
 3.0 版本将 **RootHide Patcher** 品牌更名为 **Umbra Patcher**；原有 **Patcher** 简称（包括桌面名称和“关于 Patcher”标题）保持不变。Bundle ID 与 Debian 包名均为 `wiki.qaq.umbra.patcher`，安装路径为 `/Applications/Patcher.app`。新包声明替换 `com.roothide.patcher`，已有转换文件继续保存在 RootHide 环境内的 `/var/mobile/RootHidePatcher`。工程及构建入口已更名，Git 仓库地址保持现有地址。
 

@@ -73,15 +73,15 @@ final class ConversionSession: ObservableObject {
     #if targetEnvironment(simulator)
       return []
     #else
-      let irisin = PackageManager(
-        identifier: "wiki.qaq.irisin", title: String(localized: "Open in Irisin"))
-      let sileo = PackageManager(
-        identifier: "org.coolstar.SileoStore", title: String(localized: "Open in Sileo"))
-      let preferredManager = IsAppAvailable(irisin.identifier) ? irisin : sileo
-      return [
-        preferredManager,
+      let managers = [
+        PackageManager(identifier: "wiki.qaq.irisin", title: String(localized: "Open in Irisin")),
+        PackageManager(identifier: "org.coolstar.SileoStore", title: String(localized: "Open in Sileo")),
         PackageManager(identifier: "xyz.willy.Zebra", title: String(localized: "Open in Zebra")),
-      ].filter { IsAppAvailable($0.identifier) }
+      ]
+      guard let preferred = managers.first(where: { IsAppAvailable($0.identifier) }) else {
+        return []
+      }
+      return [preferred]
     #endif
   }
 
