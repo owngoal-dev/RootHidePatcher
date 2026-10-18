@@ -1,6 +1,6 @@
 Package: wiki.qaq.umbra.patcher
 Name: Umbra Patcher
-Version: 3.0
+Version: 3.0-1
 Architecture: iphoneos-arm64e
 Depends: firmware (>= 15.0), libxar1, ldid, file, dpkg, gawk, plutil(>= 0.2.2-1), uikittools(>= 2.1.6-4)
 Description: Convert supported tweak packages for RootHide custom firmware.

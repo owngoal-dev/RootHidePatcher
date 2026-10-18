@@ -3,8 +3,10 @@ import UniformTypeIdentifiers
 
 /// One button in the middle, options in a drawer below it.
 struct ContentView: View {
-  private static let packageType = UTType(
-    importedAs: "org.debian.deb-archive", conformingTo: .archive)
+  // Providers may associate .deb with different registered types. Resolve the
+  // extension instead of requiring one identifier; importFile checks it again.
+  private static let packageTypes = UTType.types(
+    tag: "deb", tagClass: .filenameExtension, conformingTo: nil)
   @ObservedObject var session: ConversionSession
   @State private var showingPicker = false
   @State private var showingAbout = false
@@ -79,7 +81,7 @@ struct ContentView: View {
     .tint(PatcherStyle.accent)
     // SwiftUI's own importer: a picker that closes itself after a pick does not
     // reliably reach a sheet's onDismiss, so the package is taken from here.
-    .fileImporter(isPresented: $showingPicker, allowedContentTypes: [Self.packageType]) { picked in
+    .fileImporter(isPresented: $showingPicker, allowedContentTypes: Self.packageTypes) { picked in
       switch picked {
       case .success(let url): convert(url)
       case .failure(let error):

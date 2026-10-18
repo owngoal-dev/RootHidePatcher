@@ -4,3 +4,11 @@
 chown -R mobile:mobile /var/mobile/RootHidePatcher/ >/dev/null 2>&1 || true
 chown -R mobile:mobile /var/tmp/com.roothide.patcher-Inbox/ >/dev/null 2>&1 || true
 chown -R mobile:mobile /var/tmp/wiki.qaq.umbra.patcher-Inbox/ >/dev/null 2>&1 || true
+
+# Register this bundle before uikittools snapshots registered IDs for uicache -a.
+# A new ID at the same app path otherwise invalidates the old ID mid-refresh.
+case "$1" in
+    configure)
+        uicache -p /Applications/Patcher.app
+        ;;
+esac

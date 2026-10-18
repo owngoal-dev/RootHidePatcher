@@ -22,7 +22,7 @@ Successful packages can be shared (including Save to Files) or opened in a suppo
 
 ### Identity and upgrade
 
-- Product: **Umbra Patcher 3.0**. Existing short labels remain **Patcher**, including the Home Screen name and About Patcher title.
+- Product: **Umbra Patcher 3.0-1**. Existing short labels remain **Patcher**, including the Home Screen name and About Patcher title.
 - Bundle ID and Debian package ID: `wiki.qaq.umbra.patcher`.
 - Installation: `/Applications/Patcher.app`.
 - The package declares `Conflicts` and `Replaces` for `com.roothide.patcher`, following Umbra's migration from RootHide Manager.

@@ -465,7 +465,7 @@ A4000000000000000000000B = {isa = XCBuildConfiguration; name = Release; buildSet
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"UmbraPatcher/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
@@ -489,7 +489,7 @@ A4000000000000000000000B = {isa = XCBuildConfiguration; name = Release; buildSet
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/roothide",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = "3.0-1";
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.umbra.patcher;
 				PRODUCT_NAME = Patcher;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -510,7 +510,7 @@ A4000000000000000000000B = {isa = XCBuildConfiguration; name = Release; buildSet
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGNING_ALLOWED = NO;
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"UmbraPatcher/Preview Content\"";
 				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
@@ -534,7 +534,7 @@ A4000000000000000000000B = {isa = XCBuildConfiguration; name = Release; buildSet
 					"$(PROJECT_DIR)",
 					"$(PROJECT_DIR)/roothide",
 				);
-				MARKETING_VERSION = 3.0;
+				MARKETING_VERSION = "3.0-1";
 				PRODUCT_BUNDLE_IDENTIFIER = wiki.qaq.umbra.patcher;
 				PRODUCT_NAME = Patcher;
 				PROVISIONING_PROFILE_SPECIFIER = "";
